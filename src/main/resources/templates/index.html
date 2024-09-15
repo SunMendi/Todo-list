@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="text-center">To-Do List</h1>
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <form method="POST" action="/tasks">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="description" placeholder="Add a new task" required>
+                    <button class="btn btn-primary" type="submit">Add Task</button>
+                </div>
+            </form>
+
+            <!-- List of tasks -->
+            <ul class="list-group">
+                <!-- Thymeleaf loop to render tasks dynamically -->
+                <li th:each="task : ${tasks}" class="list-group-item d-flex justify-content-between align-items-center">
+                    <!-- Display task description and add a line-through if completed -->
+                    <span th:text="${task.description}" th:classappend="${task.completed ? 'text-decoration-line-through' : ''}"></span>
+
+                    <div>
+                        <!-- Complete task button -->
+                        <form method="POST" th:action="'/tasks/complete/' + ${task.id}" style="display:inline;">
+                            <button class="btn btn-success btn-sm" th:disabled="${task.completed}" type="submit">Complete</button>
+                        </form>
+
+                        <!-- Delete task button -->
+                        <form method="POST" th:action="'/tasks/delete/' + ${task.id}" style="display:inline;">
+                            <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                        </form>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>
